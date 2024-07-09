@@ -94,6 +94,17 @@ const LogoutUser = async (req, res) => {
     })
 }
 
+const UpdateUser = async(req, res) => {
+    const {loginUser} = req.body
+    const user = await UserModel.findOne({_id: loginUser._id})
+
+    user.userName = loginUser.userName
+    user.email = loginUser.email
+    user.password = loginUser.password
+
+    await user.save()
+}
+
 // ************* PASSPORT ******************
 /*
 passport.use(new LocalStrategy((username, password, done) => {
@@ -120,4 +131,4 @@ passport.deserializeUser((id, done) => {
 });
 */
 
-module.exports = { SaveUser, LoginUser, displayUser, LogoutUser }
+module.exports = { SaveUser, LoginUser, displayUser, LogoutUser, UpdateUser }

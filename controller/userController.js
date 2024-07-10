@@ -1,7 +1,4 @@
 const UserModel = require("../model/userModel");
-const session = require('express-session');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 
 const SaveUser = async (req, res) => {
@@ -104,31 +101,5 @@ const UpdateUser = async(req, res) => {
 
     await user.save()
 }
-
-// ************* PASSPORT ******************
-/*
-passport.use(new LocalStrategy((username, password, done) => {
-    const user = UserModel.find(u => u.username === username);
-    if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-    }
-    bcrypt.compare(password, user.password, (err, res) => {
-        if (res) {
-            return done(null, user);
-        } else {
-            return done(null, false, { message: 'Incorrect password.' });
-        }
-    });
-}));
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    const user = users.find(u => u.id === id);
-    done(null, user);
-});
-*/
 
 module.exports = { SaveUser, LoginUser, displayUser, LogoutUser, UpdateUser }

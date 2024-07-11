@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
+// const sharedSession = require('express-socket.io-session');
 
 const connectDatabase = require("./config/databaseConnection")
 const userRoutes = require("./routes/userRoutes")
@@ -13,18 +14,43 @@ const pageRoutes = require("./routes/pageRoutes");
 const gameRoutes = require("./routes/gameRoutes")
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
 
 app.use(cors({
     origin: 'http://localhost:3000', // İzin verilen kaynak (client) adresi
     credentials: true // İzin verilen taleplerde "credentials" (örneğin, cookies, Authorization headers) gönderilmesine izin ver
 }));
+
+const server = http.createServer(app);
+const io = socketIo(server)
+
+// const io = socketIo(server, {
+//     cors:{
+//         origin: 'http://localhost:3000',
+//         credentials: true
+//     }
+// });
+
+
+
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ key: "Cookie", secret: 'my_secret', resave: true, saveUninitialized: true }));
+
+
+// const sessionMiddleware = session({ 
+//     key: "Cookie", 
+//     secret: 'my_secret', 
+//     resave: true, 
+//     saveUninitialized: true 
+// });
+// app.use(sessionMiddleware);
+
+
+// io.use(sharedSession(sessionMiddleware, {
+//     autoSave: true
+// }));
 
 // Routes
 app.use("/user", userRoutes)
@@ -35,18 +61,15 @@ app.use("/game", gameRoutes)
 connectDatabase()
 
 
-
 // *********************************** UNITY *****************************************
+// const userSockets = new Map();
 
-/*
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('a user connected: ' + socket.id);
 
     socket.on('test', async (data) => {
         console.log('Data:', data);
-
-        // await connectDatabase()
-        const dbData = 321
+        const dbData = userId;
 
         socket.emit('hi', dbData);
     });    
@@ -55,7 +78,7 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
 });
-*/
+
 
 // server start
 const PORT = process.env.PORT || 3001;

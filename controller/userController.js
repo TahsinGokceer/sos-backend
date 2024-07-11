@@ -1,4 +1,11 @@
 const UserModel = require("../model/userModel");
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 const bcrypt = require('bcryptjs');
 
 const SaveUser = async (req, res) => {
@@ -101,5 +108,41 @@ const UpdateUser = async(req, res) => {
 
     await user.save()
 }
+
+// ************************* UNITY ****************************
+/*
+io.on('connection', (socket) => {
+    console.log('Client connected:', socket.id);
+
+    // Send initial active user data on connection
+    UserModel.findOne({ _id: req.session.userID }).then((activeUser) => {
+        if (activeUser) {
+            socket.emit('activeUserUpdated', { success: true, userName: activeUser.userName });
+        } else {
+            socket.emit('activeUserUpdated', { success: false, message: 'No active user found' });
+        }
+    });
+
+    // Listen for user login and logout events
+    socket.on('userLogin', () => {
+        // Retrieve and emit active user data
+        console.log("socket-on");
+        // UserModel.findOne({ _id: req.session.userID }).then((activeUser) => {
+        //     if (activeUser) {
+        //         io.emit('activeUserUpdated', { success: true, userName: activeUser.userName });
+        //     } else {
+        //         io.emit('activeUserUpdated', { success: false, message: 'No active user found' });
+        //     }
+        // });
+    });
+
+    socket.on('userLogout', () => {
+        // Emit updated active user data (no active user)
+        io.emit('activeUserUpdated', { success: false, message: 'No active user' });
+    });
+});
+
+
+*/
 
 module.exports = { SaveUser, LoginUser, displayUser, LogoutUser, UpdateUser }

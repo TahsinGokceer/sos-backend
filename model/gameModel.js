@@ -9,14 +9,10 @@ const GameSchema = new mongoose.Schema({
     },
     result: {
         type: String
-    },
-    winnerUserID: {
-        type: Number
-    },
-    loserUserID: {
-        type: Number
-    },
-    gameType: {
+    },players: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User'
+    },gameType: {
         type: Boolean
     },
 })

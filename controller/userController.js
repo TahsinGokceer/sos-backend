@@ -1,11 +1,4 @@
 const UserModel = require("../model/userModel");
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
 const bcrypt = require('bcryptjs');
 
 const SaveUser = async (req, res) => {
@@ -30,6 +23,7 @@ const SaveUser = async (req, res) => {
             totalGames: 0,
             gamesWon: 0,
             gamesLost: 0,
+            gamesDraw: 0,
             point: 0,
             games: []
         });
@@ -102,47 +96,27 @@ const UpdateUser = async(req, res) => {
     const {loginUser} = req.body
     const user = await UserModel.findOne({_id: loginUser._id})
 
-    user.userName = loginUser.userName
-    user.email = loginUser.email
-    user.password = loginUser.password
+    const existUsername = await UserModel.findOne({userName: loginUser.userName, _id: { $ne: loginUser._id }})
 
-    await user.save()
+    if(existUsername){
+        res.json({message: "username", user})
+    }
+
+    const existEmail = await UserModel.findOne({email: loginUser.email, _id: {$ne: loginUser._id}})
+
+    if(existEmail){
+        res.json({message: "email", user})
+    }
+
+    if(!existEmail && !existUsername){
+        user.userName = loginUser.userName
+        user.email = loginUser.email
+        user.password = loginUser.password
+
+        await user.save()
+        res.json({message: "Update successfully", success: true, user})
+    }
 }
 
-// ************************* UNITY ****************************
-/*
-io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
-
-    // Send initial active user data on connection
-    UserModel.findOne({ _id: req.session.userID }).then((activeUser) => {
-        if (activeUser) {
-            socket.emit('activeUserUpdated', { success: true, userName: activeUser.userName });
-        } else {
-            socket.emit('activeUserUpdated', { success: false, message: 'No active user found' });
-        }
-    });
-
-    // Listen for user login and logout events
-    socket.on('userLogin', () => {
-        // Retrieve and emit active user data
-        console.log("socket-on");
-        // UserModel.findOne({ _id: req.session.userID }).then((activeUser) => {
-        //     if (activeUser) {
-        //         io.emit('activeUserUpdated', { success: true, userName: activeUser.userName });
-        //     } else {
-        //         io.emit('activeUserUpdated', { success: false, message: 'No active user found' });
-        //     }
-        // });
-    });
-
-    socket.on('userLogout', () => {
-        // Emit updated active user data (no active user)
-        io.emit('activeUserUpdated', { success: false, message: 'No active user' });
-    });
-});
-
-
-*/
 
 module.exports = { SaveUser, LoginUser, displayUser, LogoutUser, UpdateUser }

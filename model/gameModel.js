@@ -1,18 +1,17 @@
 const mongoose = require("mongoose")
 
 const GameSchema = new mongoose.Schema({
-    // gameID: {
-    //     type: Number
-    // },
     gameLevel: {
         type: String
     },
     result: {
         type: String
-    },players: {
+    },
+    players: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'User'
-    },gameType: {
+    },
+    gameType: {
         type: Boolean
     },
 })

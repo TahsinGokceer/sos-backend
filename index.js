@@ -72,6 +72,77 @@ io.on('connection', (socket) => {
         // })
 
         // await game.save()
+    })    
+
+    socket.on("loginUser", async (userData) => {
+        console.log(userData);
+        const email = userData[0]
+        const password = userData[1]
+
+        let user = await UserModel.findOne({ userName: email })        
+
+        if(user){
+            if(user.password === password){
+                // req.session.userID = user._id
+                socket.emit("loginSuccessful", "login successful")
+                
+                // res.status(201).json({success: true, user})  // Giriş işlemi başarılı
+            }else{
+                socket.emit("errorLogin", "Wrong Password")
+                // res.status(200).json({ message: 'Wrong Password' });
+            }
+        }else{
+            user = await UserModel.findOne({ email: email })
+
+            if(user){
+                if(user.password === password){
+                    // req.session.userID = user._id
+                    socket.emit("loginSuccessful", "login successful")
+
+                    // res.status(201).json({success: true, user})   // Giriş işlemi başarılı
+                }else{
+                    socket.emit("errorLogin", "Wrong Password")
+                    // res.status(200).json({ message: 'Wrong Password' });    
+                }
+            }else{
+                socket.emit("errorLogin", 'Wrong username or email')
+                // res.status(200).json({ message: 'Wrong username or email' });
+            }
+        }
+    })    
+
+    socket.on("registerUser", async (userData) => {
+        console.log(userData);
+        const userName = userData[0]
+        const email = userData[1]
+        const password = userData[2]
+
+        const existingUser = await UserModel.findOne({ userName: userName });
+        if (existingUser) {
+            socket.emit("errorRegister", "'This username is already taken.'")
+            // return res.status(200).json({ message: 'This username is already taken.' });
+        }
+        const existingUserMail = await UserModel.findOne({ email: email });
+        if (existingUserMail) {
+            socket.emit("errorRegister", "This email is already exist.")
+            // return res.status(200).json({ message: 'This email is already exist.' });
+        }
+
+        const user = new UserModel({
+            userName: userName,
+            email: email,
+            password: password,
+            percentOfWin: 0,
+            totalGames: 0,
+            gamesWon: 0,
+            gamesLost: 0,
+            gamesDraw: 0,
+            point: 0,
+            games: []
+        });
+
+        await user.save();
+        socket.emit("registerSuccessful", "register successful")
     })
 
     socket.on('disconnect', () => {
@@ -93,10 +164,3 @@ const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-// app.listen(3001, (err) => {
-//     if (err) console.log(err);
-//     console.log("server started");
-// })
-
-

@@ -7,12 +7,11 @@ const SaveUser = async (req, res) => {
 
         const existingUser = await UserModel.findOne({ userName: userName });
         if (existingUser) {
-            console.log('This username is already taken.');
-            return res.status(200).json({ message: 'This username is already taken.' });
+            return res.status(200).json({ message: 'username' });
         }
         const existingUserMail = await UserModel.findOne({ email: email });
         if (existingUserMail) {
-            return res.status(200).json({ message: 'This email is already exist.' });
+            return res.status(200).json({ message: 'email' });
         }
 
         const user = new UserModel({
@@ -59,7 +58,7 @@ const LoginUser = async (req, res) => {
                 req.session.userID = user._id
                 res.status(201).json({success: true, user})  // Giriş işlemi başarılı
             }else{
-                res.status(200).json({ message: 'Wrong Password' });
+                res.status(200).json({ message: 'Password' });
             }
         }else{
             user = await UserModel.findOne({ email: email })
@@ -69,10 +68,10 @@ const LoginUser = async (req, res) => {
                     req.session.userID = user._id
                     res.status(201).json({success: true, user})   // Giriş işlemi başarılı
                 }else{
-                    res.status(200).json({ message: 'Wrong Password' });    
+                    res.status(200).json({ message: 'Password' });    
                 }
             }else{
-                res.status(200).json({ message: 'Wrong username or email' });
+                res.status(200).json({ message: 'Email' });
             }
         }
         
@@ -117,6 +116,5 @@ const UpdateUser = async(req, res) => {
         res.json({message: "Update successfully", success: true, user})
     }
 }
-
 
 module.exports = { SaveUser, LoginUser, displayUser, LogoutUser, UpdateUser }

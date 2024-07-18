@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
 
     socket.on('test', (data) => {
         console.log('Data:', data);
-    });    
+    });
 
     socket.on("updatedUser", async (userData) => {
         console.log("Updated User: \n", userData);
@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
         // await user.save()        
     })
 
-    socket.on("addGame", async(gameData) => {
+    socket.on("addGame", async (gameData) => {
         // Oynanan oyun database'e ekleniyor.
         // const game = new GameModel({
         //     gameLevel: gameData.gameLevel,
@@ -72,44 +72,44 @@ io.on('connection', (socket) => {
         // })
 
         // await game.save()
-    })    
+    })
 
     socket.on("loginUser", async (userData) => {
         console.log(userData);
         const email = userData[0]
         const password = userData[1]
 
-        let user = await UserModel.findOne({ userName: email })        
+        let user = await UserModel.findOne({ userName: email })
 
-        if(user){
-            if(user.password === password){
+        if (user) {
+            if (user.password === password) {
                 // req.session.userID = user._id
-                socket.emit("loginSuccessful", "login successful")
-                
+                socket.emit("loginSuccessful", user)
+
                 // res.status(201).json({success: true, user})  // Giriş işlemi başarılı
-            }else{
+            } else {
                 socket.emit("errorLogin", "Wrong Password")
                 // res.status(200).json({ message: 'Wrong Password' });
             }
-        }else{
+        } else {
             user = await UserModel.findOne({ email: email })
 
-            if(user){
-                if(user.password === password){
+            if (user) {
+                if (user.password === password) {
                     // req.session.userID = user._id
-                    socket.emit("loginSuccessful", "login successful")
+                    socket.emit("loginSuccessful", user)
 
                     // res.status(201).json({success: true, user})   // Giriş işlemi başarılı
-                }else{
+                } else {
                     socket.emit("errorLogin", "Wrong Password")
                     // res.status(200).json({ message: 'Wrong Password' });    
                 }
-            }else{
+            } else {
                 socket.emit("errorLogin", 'Wrong username or email')
                 // res.status(200).json({ message: 'Wrong username or email' });
             }
         }
-    })    
+    })
 
     socket.on("registerUser", async (userData) => {
         console.log(userData);
@@ -118,31 +118,34 @@ io.on('connection', (socket) => {
         const password = userData[2]
 
         const existingUser = await UserModel.findOne({ userName: userName });
+        const existingUserMail = await UserModel.findOne({ email: email });
         if (existingUser) {
-            socket.emit("errorRegister", "'This username is already taken.'")
+            console.log("AAAAAAAAAAAAAAAAA");
+            socket.emit("errorRegister", "This username is already taken.")
             // return res.status(200).json({ message: 'This username is already taken.' });
         }
-        const existingUserMail = await UserModel.findOne({ email: email });
-        if (existingUserMail) {
+        else if (existingUserMail) {
+            console.log("BBBBBBBBBBBBBBBBB");
             socket.emit("errorRegister", "This email is already exist.")
             // return res.status(200).json({ message: 'This email is already exist.' });
         }
+        else {
+            const user = new UserModel({
+                userName: userName,
+                email: email,
+                password: password,
+                percentOfWin: 0,
+                totalGames: 0,
+                gamesWon: 0,
+                gamesLost: 0,
+                gamesDraw: 0,
+                point: 0,
+                games: []
+            });
 
-        const user = new UserModel({
-            userName: userName,
-            email: email,
-            password: password,
-            percentOfWin: 0,
-            totalGames: 0,
-            gamesWon: 0,
-            gamesLost: 0,
-            gamesDraw: 0,
-            point: 0,
-            games: []
-        });
-
-        await user.save();
-        socket.emit("registerSuccessful", "register successful")
+            await user.save();
+            socket.emit("registerSuccessful", "register successful")
+        }
     })
 
     socket.on('disconnect', () => {
@@ -150,14 +153,14 @@ io.on('connection', (socket) => {
     });
 });
 
-app.get("/game/find", async(req, res) => {
+app.get("/game/find", async (req, res) => {
     id = req.session.userID;
     let user = await UserModel.findOne({ _id: id })
-    const user2 = await UserModel.findOne({userName: "Hande"})
+    const user2 = await UserModel.findOne({ userName: "Hande" })
     console.log("Game Controller: " + user + user2);
     io.emit('hi', [user, user2]);
-    res.json({user})    
-}) 
+    res.json({ user })
+})
 
 // server start
 const PORT = process.env.PORT || 3001;

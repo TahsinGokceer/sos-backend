@@ -39,7 +39,7 @@ app.use(session({
         httpOnly: true,
         secure: true,
         sameSite: 'none' }, 
-    store: MongoStore.create({ mongoUrl: `${process.env.MONGO_URI}` }), 
+    store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net" }), 
     resave: true, 
     saveUninitialized: true
 }));

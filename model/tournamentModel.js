@@ -8,7 +8,8 @@ const TournamentSchema = new mongoose.Schema({
         type: Number
     },
     gameID: {
-        type: []
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Game'
     },
     players: {
         type: [mongoose.Schema.Types.ObjectId],

@@ -5,10 +5,12 @@ const ResultSchema = new mongoose.Schema({
     //     type: Number
     // },
     tournamentID: {
-        type: Number
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Tournament'
     },
     playerID: {
-        type: Number
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User' 
     },
     point: {
         type: Number

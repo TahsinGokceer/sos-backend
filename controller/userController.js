@@ -43,7 +43,6 @@ const LoginUser = async (req, res) => {
     try {
         const { email, password } = req.body;        
         console.log("Login:\n",email, password);
-        console.log(req.rawHeaders);
         let user = await UserModel.findOne({ userName: email })
 
         // şifrelenmiş şifreyi karşılaştıran kod

@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
-const mongoose = require("mongoose")
 
 const connectDatabase = require("./config/databaseConnection")
 const userRoutes = require("./routes/userRoutes")
@@ -27,7 +26,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ key: "Cookie", secret: 'my_secret', resave: true, saveUninitialized: true }));
+app.use(session({ key: "Cookie", secret: 'my_secret', resave: true, saveUninitialized: true, cookie: { sameSite: 'none', secure: true,}}));
 
 // Routes
 app.use("/user", userRoutes)
@@ -35,14 +34,6 @@ app.use("/tournament", tournamentRoutes)
 app.use("/page", pageRoutes)
 
 connectDatabase()
-// Connect Database
-// try {
-//     mongoose.connect(`${process.env.MONGO_URI}`)
-    
-// } catch (error) {
-//     console.log("------------------------------------ HATA ---------------------------------");
-//     console.log(error);
-// }
 
 
 // *********************************** UNITY *****************************************

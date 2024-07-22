@@ -39,7 +39,7 @@ app.use(session({
     //     secure: true,
     //     sameSite: 'none' }, 
     //     domain: "http://localhost:3000/",
-    store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
+    store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/"}) , 
     resave: true, 
     saveUninitialized: true
 }));

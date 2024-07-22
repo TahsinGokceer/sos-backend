@@ -33,7 +33,6 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ 
-    key: "Cookie", 
     secret: 'my_secret', 
     // cookie: { 
     //     httpOnly: true,

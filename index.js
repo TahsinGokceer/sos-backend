@@ -47,6 +47,7 @@ app.use(session({
 // MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net"})
 
 
+
 // Routes
 app.use("/user", userRoutes)
 app.use("/tournament", tournamentRoutes)

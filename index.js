@@ -18,8 +18,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server)
 var store = new MongoDBStore({
-    uri: 'mongodb://127.0.0.1:27017/connect_mongodb_session_test',
-    collection: 'mySessions'
+    uri: 'mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos',
+    collection: 'users'
   });
 
 app.use(cors({

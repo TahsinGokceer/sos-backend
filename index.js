@@ -35,12 +35,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({ 
     key: "Cookie", 
     secret: 'my_secret', 
-    cookie: { 
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none' }, 
-        domain: "http://localhost:3000/",
-    store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
+    // cookie: { 
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: 'none' }, 
+    //     domain: "http://localhost:3000/",
+    // store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
     resave: true, 
     saveUninitialized: true
 }));

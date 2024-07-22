@@ -45,24 +45,28 @@ io.on('connection', (socket) => {
         console.log('Data:', data);
     });
 
-    socket.on("updatedUser", async (userData) => {
-        console.log("Updated User: \n", userData);
+    socket.on("updatedUser", async (userDataString) => {
+        const userData = JSON.parse(userDataString)
+        console.log("Updated User:\n", userData);
 
         // Oyun oynayan kullanıcının bilgileri güncelleniyor
-        // const user = await UserModel.findOne({_id: userData._id})
+        const user = await UserModel.findOne({_id: userData._id})
 
-        // user.percentOfWin = userData.percentOfWin
-        // user.totalGames = userData.totalGames
-        // user.gamesWon = userData.gamesWon
-        // user.gamesLost = userData.gamesLost
-        // user.gamesDraw = userData.gamesDraw
-        // user.point = userData.point
-        // user.games = userData.games
+        user.percentOfWin = userData.percentOfWin
+        user.totalGames = userData.totalGames
+        user.gamesWon = userData.gamesWon
+        user.gamesLost = userData.gamesLost
+        user.gamesDraw = userData.gamesDraw
+        user.point = userData.point
+        user.games = userData.games
 
-        // await user.save()        
+        await user.save()        
     })
 
-    socket.on("addGame", async (gameData) => {
+    socket.on("addGame", async (gameDataString) => {
+        const gameData = JSON.parse(gameDataString)
+        console.log("Game:\n", gameData);
+
         // Oynanan oyun database'e ekleniyor.
         // const game = new GameModel({
         //     gameLevel: gameData.gameLevel,
@@ -75,7 +79,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on("loginUser", async (userData) => {
-        console.log(userData);
+        console.log("Login User:\n", userData);
         const email = userData[0]
         const password = userData[1]
 
@@ -112,7 +116,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on("registerUser", async (userData) => {
-        console.log(userData);
+        console.log("Register User:\n", userData);
         const userName = userData[0]
         const email = userData[1]
         const password = userData[2]

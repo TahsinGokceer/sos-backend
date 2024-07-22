@@ -1,8 +1,9 @@
+require('dotenv').config();
 const mongoose = require("mongoose")
 
 async function connectDatabase() {
     try {
-        await mongoose.connect("mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos")
+        await mongoose.connect(`${process.env.MONGO_URI}`)
         
     } catch (error) {
         console.log("------------------------------------ HATA ---------------------------------");

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
+const mongoose = require("mongoose")
 
 const connectDatabase = require("./config/databaseConnection")
 const userRoutes = require("./routes/userRoutes")
@@ -33,7 +34,15 @@ app.use("/user", userRoutes)
 app.use("/tournament", tournamentRoutes)
 app.use("/page", pageRoutes)
 
-connectDatabase()
+// connectDatabase()
+// Connect Database
+try {
+    mongoose.connect(`${process.env.MONGO_URI}`)
+    
+} catch (error) {
+    console.log("------------------------------------ HATA ---------------------------------");
+    console.log(error);
+}
 
 
 // *********************************** UNITY *****************************************

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors'); // Güvenlik için
 const session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -16,6 +17,10 @@ const GameModel = require("./model/gameModel")
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server)
+var store = new MongoDBStore({
+    uri: 'mongodb://127.0.0.1:27017/connect_mongodb_session_test',
+    collection: 'mySessions'
+  });
 
 app.use(cors({
     origin: 'http://localhost:3000', // İzin verilen kaynak (client) adresi
@@ -26,7 +31,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ key: "Cookie", secret: 'my_secret', resave: true, saveUninitialized: true, cookie: { sameSite: 'none', secure: true,}}));
+app.use(session({ secret: 'my_secret', cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }, store: store, resave: true, saveUninitialized: true}));
 
 // Routes
 app.use("/user", userRoutes)

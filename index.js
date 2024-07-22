@@ -34,15 +34,15 @@ app.use("/user", userRoutes)
 app.use("/tournament", tournamentRoutes)
 app.use("/page", pageRoutes)
 
-// connectDatabase()
+connectDatabase()
 // Connect Database
-try {
-    mongoose.connect(`${process.env.MONGO_URI}`)
+// try {
+//     mongoose.connect(`${process.env.MONGO_URI}`)
     
-} catch (error) {
-    console.log("------------------------------------ HATA ---------------------------------");
-    console.log(error);
-}
+// } catch (error) {
+//     console.log("------------------------------------ HATA ---------------------------------");
+//     console.log(error);
+// }
 
 
 // *********************************** UNITY *****************************************

@@ -32,7 +32,20 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: 'my_secret', cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }, store: MongoStore.create({ mongoUrl: `${process.env.MONGO_URI}` }), resave: true, saveUninitialized: true}));
+app.use(session({ 
+    key: "Cookie", 
+    secret: 'my_secret', 
+    cookie: { 
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none' }, 
+    store: MongoStore.create({ mongoUrl: `${process.env.MONGO_URI}` }), 
+    resave: true, 
+    saveUninitialized: true
+}));
+
+
+
 
 // Routes
 app.use("/user", userRoutes)

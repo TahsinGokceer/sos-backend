@@ -28,6 +28,8 @@ app.use(cors({
     credentials: true // İzin verilen taleplerde "credentials" (örneğin, cookies, Authorization headers) gönderilmesine izin ver
 }));
 
+app.set('trust proxy', true)
+
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser())
@@ -39,7 +41,7 @@ app.use(session({
     //     secure: true,
     //     sameSite: 'none' }, 
     //     domain: "http://localhost:3000/",
-    store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/"}) , 
+    store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
     resave: true, 
     saveUninitialized: true
 }));

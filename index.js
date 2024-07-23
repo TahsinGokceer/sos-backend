@@ -20,7 +20,7 @@ const server = http.createServer(app);
 const io = socketIo(server)
 
 app.use(cors({
-    origin: 'http://localhost:3000', // İzin verilen kaynak (client) adresi
+    origin: ['http://localhost:3000', "https://sos-frontend-gyqj12va3-tahsins-projects-6c941dbb.vercel.app/"], // İzin verilen kaynak (client) adresi
     credentials: true // İzin verilen taleplerde "credentials" (örneğin, cookies, Authorization headers) gönderilmesine izin ver
 }));
 

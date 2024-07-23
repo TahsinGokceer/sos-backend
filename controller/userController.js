@@ -87,12 +87,11 @@ const displayUser = async (req, res) => {
 }
 
 const LogoutUser = async (req, res) => {
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     req.session.destroy((err) => {
         if (err) {
             return console.log("Çıkış işlemi hatası");
         }
-        console.log("Çıkış işlemi yapıldı");
+        
         res.clearCookie('connect.sid');
         res.json({message: "Çıkış işlemi başarılı"})
     })

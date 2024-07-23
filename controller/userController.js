@@ -87,6 +87,7 @@ const displayUser = async (req, res) => {
 }
 
 const LogoutUser = async (req, res) => {
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     req.session.destroy((err) => {
         if (err) {
             return console.log("Çıkış işlemi hatası");

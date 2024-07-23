@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors'); // Güvenlik için
 const session = require('express-session');
-// var MongoDBStore = require('connect-mongodb-session')(session);
 const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -12,16 +11,13 @@ const connectDatabase = require("./config/databaseConnection")
 const userRoutes = require("./routes/userRoutes")
 const tournamentRoutes = require("./routes/tournamentRoutes")
 const pageRoutes = require("./routes/pageRoutes");
+const resultRoutes = require("./routes/resultRoutes");
 const UserModel = require("./model/userModel")
 const GameModel = require("./model/gameModel")
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server)
-// var store = new MongoDBStore({
-//     uri: 'mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos',
-//     collection: 'users'
-//   });
 
 app.use(cors({
     origin: 'http://localhost:3000', // İzin verilen kaynak (client) adresi
@@ -36,24 +32,20 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ 
     secret: 'my_secret', 
-    cookie: { 
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none' }, 
-        // domain: "http://localhost:3000/",
+    // cookie: { 
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: 'none' }, 
     store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
     resave: true, 
     saveUninitialized: true
 }));
 
-// MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net"})
-
-
-
 // Routes
 app.use("/user", userRoutes)
 app.use("/tournament", tournamentRoutes)
 app.use("/page", pageRoutes)
+app.use("/result", resultRoutes)
 
 connectDatabase()
 

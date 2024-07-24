@@ -3,7 +3,7 @@ const cors = require('cors'); // Güvenlik için
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
-const https = require('https');
+const http = require('http');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
 
@@ -16,7 +16,7 @@ const UserModel = require("./model/userModel")
 const GameModel = require("./model/gameModel")
 
 const app = express();
-const server = https.createServer(app);
+const server = http.createServer(app);
 const io = socketIo(server)
 
 app.use(cors({

@@ -3,7 +3,7 @@ const cors = require('cors'); // Güvenlik için
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
-const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
@@ -57,7 +57,7 @@ connectDatabase()
 
 // *********************************** UNITY *****************************************
 
-const server = http.createServer(options, app);
+const server = https.createServer(options, app);
 const io = socketIo(server, {
     cors: {
         origin: "*",

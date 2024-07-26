@@ -4,6 +4,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
 const http = require('http');
+const fs = require('fs');
 const socketIo = require('socket.io');
 const cookieParser = require('cookie-parser');
 
@@ -15,12 +16,15 @@ const resultRoutes = require("./routes/resultRoutes");
 const UserModel = require("./model/userModel")
 const GameModel = require("./model/gameModel")
 
+const options = {
+    key: fs.readFileSync('certificates/key.pem'),
+    cert: fs.readFileSync('certificates/cert.pem')
+};
+
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server)
 
 app.use(cors({
-    origin: ['http://localhost:3000', "https://sos-frontend-4a2p.vercel.app"], // İzin verilen kaynak (client) adresi
+    origin: ['http://localhost:3000', "https://sos-frontend-4a2p.vercel.app", "http://68.219.181.97:3004"], // İzin verilen kaynak (client) adresi
     credentials: true // İzin verilen taleplerde "credentials" (örneğin, cookies, Authorization headers) gönderilmesine izin ver
 }));
 
@@ -34,12 +38,13 @@ app.use(session({
     secret: 'my_secret', 
     cookie: { 
         httpOnly: true,
-        secure: true,
-        sameSite: 'none' }, 
+        secure: false,
+        sameSite: 'none' },
     store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
     resave: true, 
     saveUninitialized: true
 }));
+
 
 // Routes
 app.use("/user", userRoutes)
@@ -51,6 +56,13 @@ connectDatabase()
 
 
 // *********************************** UNITY *****************************************
+
+const server = http.createServer(options, app);
+const io = socketIo(server, {
+    cors: {
+        origin: "*",
+    }
+})
 
 io.on('connection', (socket) => {
     console.log('a user connected: ' + socket.id);
@@ -181,7 +193,7 @@ app.get("/game/find", async (req, res) => {
 })
 
 // server start
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3003;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

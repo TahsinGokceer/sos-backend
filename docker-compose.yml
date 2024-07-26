@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  node:
+    container_name: node_container
+    build: .
+    environment:
+      - PORT=3003
+      - MONGO_URI=mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos
+    ports: 
+      - "3003:3003"
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo_container
+    image: mongo
+    ports:
+      - "27018:27018"
+    

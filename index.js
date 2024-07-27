@@ -38,7 +38,7 @@ app.use(session({
     secret: 'my_secret', 
     cookie: { 
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'none' },
     store: MongoStore.create({ mongoUrl: "mongodb+srv://tgokceer:X3V35570@cluster0.plwkuyo.mongodb.net/sos"}) , 
     resave: true, 
